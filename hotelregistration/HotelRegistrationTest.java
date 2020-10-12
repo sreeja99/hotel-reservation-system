@@ -28,7 +28,15 @@ class HotelRegistrationTest {
 		HotelRegistration.addHotel("Bridgewood", 160, 60, 4);
 		HotelRegistration.addHotel("Ridgewood", 220, 150, 5);
 	    Hotel hotel = HotelRegistration.findCheapestBestRatedHotel("01-Oct-2020", "06-Oct-2020");
-	    assertEquals("Lakewood", hotel.getHotelName());
+	    assertEquals("Cheapest Hotel", hotel.getHotelName());
+	}
+	@Test
+	public void returnBestRatedHotel() {
+		HotelRegistration.addHotel("Lakewood", 110, 90, 3);
+		HotelRegistration.addHotel("Bridgewood", 160, 60, 4);
+		HotelRegistration.addHotel("Ridgewood", 220, 150, 5);
+	    Hotel hotel = HotelRegistration.findBestRatedHotel("01-Oct-2020", "06-Oct-2020");
+	    assertEquals("Best Rated Hotel", hotel.getHotelName());
 	}
 
 }
