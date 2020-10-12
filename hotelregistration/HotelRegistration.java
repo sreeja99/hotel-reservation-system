@@ -12,8 +12,9 @@ import java.util.stream.Collectors;
 public class HotelRegistration {
 	private static List<Hotel> hotelList =new ArrayList<Hotel>();//list of hotel
 	//method to add hotel
-	public static boolean addHotel(String hotelName,int weekdayRegCustRate,int weekendRegCustRate,int rating) {
-		Hotel hotel =new Hotel(hotelName,weekdayRegCustRate,weekendRegCustRate,rating);
+	public static boolean addHotel(String hotelName,int weekdayRegCustRate,int weekendRegCustRate,int rating
+			,int weekdayRewardCustRate,int weekendRewardCustRate) {
+		Hotel hotel =new Hotel(hotelName,weekdayRegCustRate,weekendRegCustRate,rating,weekdayRewardCustRate,weekendRewardCustRate);
 		hotelList.add(hotel);
 		return true;
 	}
@@ -63,10 +64,18 @@ public class HotelRegistration {
         	return 0;
 	}
 	//totalrate including weekdays and weekends
-	public static void setTotalRateForHotels(long noOfWeekdays,long noOfWeekends) {
-		for(Hotel hotel: hotelList) {
-        	long totalRate = noOfWeekdays*hotel.getWeekdayRegularCustRate()+noOfWeekends*hotel.getWeekendRegularCustRate();
-        	hotel.setTotalRate(totalRate);
+	public static void setTotalRateForHotels(long noOfWeekdays,long noOfWeekends,Customer customer) {
+		if(customer.getCustomerType().equals("regular")) {
+			for(Hotel hotel: hotelList) {
+	        	long totalRate = noOfWeekdays*hotel.getWeekdayRegularCustRate()+noOfWeekends*hotel.getWeekendRegularCustRate();
+	        	hotel.setTotalRate(totalRate);
+			}
+		}
+		else if(customer.getCustomerType().equals("reward")) {
+			for(Hotel hotel: hotelList) {
+	        	long totalRate = noOfWeekdays*hotel.getWeekdayRewardCustRate()+noOfWeekends*hotel.getWeekendRewardCustRate();
+	        	hotel.setTotalRate(totalRate);
+			}
 		}
 	}
 	//cheapest best rated hotel
@@ -123,9 +132,9 @@ public class HotelRegistration {
 		HotelRegistration hotelRegistration = new HotelRegistration();
 		System.out.println("Welcome To Hotel Reservation Program in HotelReservation class");
 		//adding hotels
-		hotelRegistration.addHotel("Lakewood", 110,90,3);
-		hotelRegistration.addHotel("Bridgewood", 160,60,4);
-		hotelRegistration.addHotel("Ridgewood", 220,150,5);
+		hotelRegistration.addHotel("Lakewood", 110,90,3,80,80);
+		hotelRegistration.addHotel("Bridgewood", 160,60,4,110,50);
+		hotelRegistration.addHotel("Ridgewood", 220,150,5,100,40);
 		System.out.println("Do You Want To add a Hotel ?(Y/N)");
 		char choice =sc.nextLine().charAt(0);
 		if(choice=='Y') 
