@@ -11,7 +11,7 @@ class HotelRegistrationTest {
 	@Test
 	public void whenHotelIsAddedShouldReturnTrue() {
 		HotelRegistration hotelRegistration =new HotelRegistration ();
-		boolean isHotelAdded = hotelRegistration.addHotel("Lakewood", 100);
+		boolean isHotelAdded = hotelRegistration.addHotel("Lakewood", 110,90);
 		Assert.assertEquals(true, isHotelAdded);
 	}
 
