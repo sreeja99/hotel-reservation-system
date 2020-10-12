@@ -27,11 +27,11 @@ public class HotelRegistration {
 		}
 	}
 	//getting total number of days
-	public static long getNoOfDays(String startD,String endD) {
+	public static long getNoOfDays(String start,String end) {
 		Date startDate=null;
         Date endDate = null;
-        startDate = parseDate(startD);
-        endDate = parseDate(endD); 
+        startDate = parseDate(start);
+        endDate = parseDate(end); 
         if(startDate.getTime()<endDate.getTime()) {
 	        long noOfDays = 1+(endDate.getTime()- startDate.getTime())/1000/60/60/24;
 			return noOfDays;
@@ -79,13 +79,13 @@ public class HotelRegistration {
 		}
 	}
 	//cheapest best rated hotel
-	public static Hotel findCheapestBestRatedHotel(String startD, String endD) {
-		long noOfWeekdays = getNoOfWeekdays(startD, endD);
-		long noOfDays = getNoOfDays(startD, endD);
+	public static Hotel findCheapestBestRatedHotel(String start, String end,Customer customer) {
+		long noOfWeekdays = getNoOfWeekdays(start, end);
+		long noOfDays = getNoOfDays(start, end);
         long noOfWeekends = noOfDays - noOfWeekdays;
         
         if(noOfDays>0){
-        	setTotalRateForHotels(noOfWeekdays,noOfWeekends);
+        	setTotalRateForHotels(noOfWeekdays,noOfWeekends,customer);
 	        List<Hotel> sortedHotelList = hotelList.stream().sorted(Comparator.comparing(Hotel::getTotalRate)).collect(Collectors.toList());
 	        
 	        Hotel cheapestHotel = sortedHotelList.get(0);
@@ -104,13 +104,13 @@ public class HotelRegistration {
         	return null;
 	}
 	//best rated hotel
-	public static Hotel findBestRatedHotel(String startD, String endD) {
+	public Hotel findBestRatedHotel(String startD, String endD,Customer customer) {
 		long noOfWeekdays = getNoOfWeekdays(startD, endD);
 		long noOfDays = getNoOfDays(startD, endD);
         long noOfWeekends = noOfDays - noOfWeekdays;
         
         if(noOfDays>0){
-        	setTotalRateForHotels(noOfWeekdays,noOfWeekends);
+        	setTotalRateForHotels(noOfWeekdays,noOfWeekends,customer);
 	        List<Hotel> sortedHotelList = hotelList.stream().sorted(Comparator.comparing(Hotel::getRating).reversed()).collect(Collectors.toList());
 	        Hotel bestRatedHotel = sortedHotelList.get(0);
 	        int bestHotelRating= sortedHotelList.get(0).getRating();
@@ -130,11 +130,18 @@ public class HotelRegistration {
 	public static void main(String[] args) {
 		Scanner sc = new Scanner(System.in);
 		HotelRegistration hotelRegistration = new HotelRegistration();
+		Customer customer = new Customer();
 		System.out.println("Welcome To Hotel Reservation Program in HotelReservation class");
 		//adding hotels
 		hotelRegistration.addHotel("Lakewood", 110,90,3,80,80);
 		hotelRegistration.addHotel("Bridgewood", 160,60,4,110,50);
 		hotelRegistration.addHotel("Ridgewood", 220,150,5,100,40);
+		System.out.println("Enter 1 if you are a regular customer \nEnter 2 if you are reward customer");
+		if(Integer.parseInt(sc.nextLine())==1) {
+        	customer.setCustomerType("regular");
+        }
+        else 
+        	customer.setCustomerType("reward");
 		System.out.println("Do You Want To add a Hotel ?(Y/N)");
 		char choice =sc.nextLine().charAt(0);
 		if(choice=='Y') 
@@ -147,15 +154,19 @@ public class HotelRegistration {
 		int weekendRegCustRate = sc.nextInt();
 		System.out.println("Enter The rating of hotel");
 		int rating=sc.nextInt();
-		hotelRegistration.addHotel(hotelName,weekdayRegCustRate,weekendRegCustRate,rating);
+		System.out.println("Enter the Weekday Reward Customer rate");
+		int weekdayRewardCustRate=sc.nextInt();
+		System.out.println("Enter the Weekend Reward Customer rate");
+		int weekendRewardCustRate=sc.nextInt();
+		hotelRegistration.addHotel(hotelName,weekdayRegCustRate,weekendRegCustRate,rating,weekdayRewardCustRate,weekendRewardCustRate);
 		}
 		System.out.println("Enter the date range in ddmmyyyy format");
 		System.out.println("Enter the start date:");
 		String start =sc.nextLine();
 		System.out.println("Enter the end date:");
 		String end = sc.nextLine();
-		Hotel cheapestHotel =hotelRegistration.findCheapestBestRatedHotel(start, end);
-		Hotel bestRatedHotel = hotelRegistration.findBestRatedHotel(start,end);
+		Hotel cheapestHotel =hotelRegistration.findCheapestBestRatedHotel(start, end,customer);
+		Hotel bestRatedHotel = hotelRegistration.findBestRatedHotel(start,end,customer);
 		System.out.println(cheapestHotel.getHotelName()+",Total Wages :"+cheapestHotel.getTotalRate()+"rating:"+cheapestHotel.getRating());
 		System.out.println(bestRatedHotel.getHotelName()+", Rating: "+bestRatedHotel.getRating()+", Total rate :$"+bestRatedHotel.getTotalRate());
 	}
