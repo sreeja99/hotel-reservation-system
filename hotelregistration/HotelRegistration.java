@@ -7,6 +7,7 @@ import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class HotelRegistration {
 	private static List<Hotel> hotelList =new ArrayList<Hotel>();//list of hotel
@@ -17,7 +18,7 @@ public class HotelRegistration {
 		return true;
 	}
 	//finding cheapest hotel
-	public static Hotel findCheapestHotel(String start,String end) {
+	public static Hotel findCheapestBestRatedHotel(String start,String end) {
 		Date StartDate=null;
 		Date EndDate=null;
 		 try {
@@ -51,8 +52,19 @@ public class HotelRegistration {
 	        	long totalRate = noOfWeekdays*hotel.getWeekdayRegularCustRate()+noOfWeekends*hotel.getWeekendRegularCustRate();
 	        	hotel.setTotalRate(totalRate);
 	        }
-		 Hotel cheapestHotel = hotelList.stream().sorted(Comparator.comparing(Hotel::getTotalRate)).findFirst().orElse(null);
-		 return cheapestHotel; 
+	       List<Hotel> sortedHotelList = hotelList.stream().sorted(Comparator.comparing(Hotel::getTotalRate)).collect(Collectors.toList());
+	        
+	      Hotel cheapestHotel = sortedHotelList.get(0);
+	      long cheapestRate= sortedHotelList.get(0).getTotalRate();
+	       for(Hotel hotel:sortedHotelList) {
+	        	if(hotel.getTotalRate()<=cheapestRate) {
+	        		if(hotel.getRating()>cheapestHotel.getRating())
+	        			cheapestHotel = hotel;
+	        	}
+	        	else 
+	        		break;
+	        }
+			return cheapestHotel;
 		 
 	}
 	public static void main(String[] args) {
@@ -82,8 +94,8 @@ public class HotelRegistration {
 		String start =sc.nextLine();
 		System.out.println("Enter the end date:");
 		String end = sc.nextLine();
-		Hotel cheapestHotel =hotelRegistration.findCheapestHotel(start, end);
-		System.out.println(cheapestHotel.getHotelName()+",Total Wages :"+cheapestHotel.getTotalRate());
+		Hotel cheapestHotel =hotelRegistration.findCheapestBestRatedHotel(start, end);
+		System.out.println(cheapestHotel.getHotelName()+",Total Wages :"+cheapestHotel.getTotalRate()+"rating:"+cheapestHotel.getRating());
 	}
 
 }
