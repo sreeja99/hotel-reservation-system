@@ -9,15 +9,15 @@ import java.util.List;
 import java.util.Scanner;
 
 public class HotelRegistration {
-	private List<Hotel> hotelList =new ArrayList<Hotel>();//list of hotel
+	private static List<Hotel> hotelList =new ArrayList<Hotel>();//list of hotel
 	//method to add hotel
-	public boolean addHotel(String hotelName,int weekdayRegCustRate,int weekendRegCustRate) {
-		Hotel hotel =new Hotel(hotelName,weekdayRegCustRate,weekendRegCustRate);
+	public static boolean addHotel(String hotelName,int weekdayRegCustRate,int weekendRegCustRate,int rating) {
+		Hotel hotel =new Hotel(hotelName,weekdayRegCustRate,weekendRegCustRate,rating);
 		hotelList.add(hotel);
 		return true;
 	}
 	//finding cheapest hotel
-	public Hotel findCheapestHotel(String start,String end) {
+	public static Hotel findCheapestHotel(String start,String end) {
 		Date StartDate=null;
 		Date EndDate=null;
 		 try {
@@ -60,9 +60,9 @@ public class HotelRegistration {
 		HotelRegistration hotelRegistration = new HotelRegistration();
 		System.out.println("Welcome To Hotel Reservation Program in HotelReservation class");
 		//adding hotels
-		hotelRegistration.addHotel("Lakewood", 110,90);
-		hotelRegistration.addHotel("Bridgewood", 160,60);
-		hotelRegistration.addHotel("Ridgewood", 220,150);
+		hotelRegistration.addHotel("Lakewood", 110,90,3);
+		hotelRegistration.addHotel("Bridgewood", 160,60,4);
+		hotelRegistration.addHotel("Ridgewood", 220,150,5);
 		System.out.println("Do You Want To add a Hotel ?(Y/N)");
 		char choice =sc.nextLine().charAt(0);
 		if(choice=='Y') 
@@ -73,7 +73,9 @@ public class HotelRegistration {
 		int weekdayRegCustRate = sc.nextInt();
 		System.out.println("Enter the  Weekend Regular Customer Rate");
 		int weekendRegCustRate = sc.nextInt();
-		hotelRegistration.addHotel(hotelName,weekdayRegCustRate,weekendRegCustRate);
+		System.out.println("Enter The rating of hotel");
+		int rating=sc.nextInt();
+		hotelRegistration.addHotel(hotelName,weekdayRegCustRate,weekendRegCustRate,rating);
 		}
 		System.out.println("Enter the date range in ddmmyyyy format");
 		System.out.println("Enter the start date:");
