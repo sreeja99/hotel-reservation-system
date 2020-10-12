@@ -2,6 +2,7 @@ package com.capgemini.hotelregistration;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
@@ -26,9 +27,31 @@ public class HotelRegistration {
 			e.printStackTrace();
 		}
 		 long noOfDays=1+(EndDate.getTime()-StartDate.getTime())/1000/60/60/24;
-		 Hotel cheapestHotel = hotelList.stream().sorted(Comparator.comparing(Hotel::getWeekdayRegularCustRate)).findFirst().orElse(null);
-		 long totalRate = noOfDays*cheapestHotel.getWeekdayRegularCustRate();
-		 cheapestHotel.setTotalRate(totalRate);
+		  Calendar startCal = Calendar.getInstance();
+	      startCal.setTime(StartDate);  
+		  Calendar endCal = Calendar.getInstance();
+	      endCal.setTime(EndDate);
+	      long noOfWeekdays = 0;
+	      if (startCal.getTimeInMillis() > endCal.getTimeInMillis()) {
+	            startCal.setTime(EndDate);
+	            endCal.setTime(StartDate);
+	            
+	        }
+	        do {
+	            if (startCal.get(Calendar.DAY_OF_WEEK) != Calendar.SATURDAY && startCal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+	                ++noOfWeekdays;
+	            }
+	            startCal.add(Calendar.DAY_OF_MONTH, 1);
+	        } while (startCal.getTimeInMillis() <= endCal.getTimeInMillis()); 
+	        
+	       long noOfWeekends = noOfDays - noOfWeekdays;
+	       System.out.println("Weekends :"+ noOfWeekends +"Weekdays :"+noOfWeekdays);
+	        
+	       for(Hotel hotel: hotelList) {
+	        	long totalRate = noOfWeekdays*hotel.getWeekdayRegularCustRate()+noOfWeekends*hotel.getWeekendRegularCustRate();
+	        	hotel.setTotalRate(totalRate);
+	        }
+		 Hotel cheapestHotel = hotelList.stream().sorted(Comparator.comparing(Hotel::getTotalRate)).findFirst().orElse(null);
 		 return cheapestHotel; 
 		 
 	}
