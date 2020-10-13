@@ -11,8 +11,8 @@ import java.util.stream.Collectors;
 
 public class HotelRegistration {
 	private static List<Hotel> hotelList =new ArrayList<Hotel>();//list of hotel
-	//method to add hotel
-	public static boolean addHotel(String hotelName,int weekdayRegCustRate,int weekendRegCustRate,int rating
+    //method to add hotel
+    public static boolean addHotel(String hotelName,int weekdayRegCustRate,int weekendRegCustRate,int rating
 			,int weekdayRewardCustRate,int weekendRewardCustRate) {
 		Hotel hotel =new Hotel(hotelName,weekdayRegCustRate,weekendRegCustRate,rating,weekdayRewardCustRate,weekendRewardCustRate);
 		hotelList.add(hotel);
@@ -63,7 +63,7 @@ public class HotelRegistration {
         else 
         	return 0;
 	}
-	//totalrate including weekdays and weekends
+	//total rate including weekdays and weekends
 	public static void setTotalRateForHotels(long noOfWeekdays,long noOfWeekends,Customer customer) {
 		if(customer.getCustomerType().equals("regular")) {
 			for(Hotel hotel: hotelList) {
@@ -167,7 +167,9 @@ public class HotelRegistration {
 		String end = sc.nextLine();
 		Hotel cheapestHotel =hotelRegistration.findCheapestBestRatedHotel(start, end,customer);
 		Hotel bestRatedHotel = hotelRegistration.findBestRatedHotel(start,end,customer);
+		//printing cheapest best rated hotel
 		System.out.println(cheapestHotel.getHotelName()+",Total Wages :"+cheapestHotel.getTotalRate()+"rating:"+cheapestHotel.getRating());
+		//printing best rated hotel
 		System.out.println(bestRatedHotel.getHotelName()+", Rating: "+bestRatedHotel.getRating()+", Total rate :$"+bestRatedHotel.getTotalRate());
 	}
 
