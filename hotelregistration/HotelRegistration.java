@@ -104,9 +104,9 @@ public class HotelRegistration {
         	return null;
 	}
 	//best rated hotel
-	public Hotel findBestRatedHotel(String startD, String endD,Customer customer) {
-		long noOfWeekdays = getNoOfWeekdays(startD, endD);
-		long noOfDays = getNoOfDays(startD, endD);
+	public Hotel findBestRatedHotel(String start, String end,Customer customer) {
+		long noOfWeekdays = getNoOfWeekdays(start, end);
+		long noOfDays = getNoOfDays(start, end);
         long noOfWeekends = noOfDays - noOfWeekdays;
         
         if(noOfDays>0){
